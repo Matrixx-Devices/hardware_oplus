@@ -20,3 +20,6 @@ allow system_app sysfs_zram:dir { search };
 allow system_app proc_pagetypeinfo:file { read };
 
 rw_dir_file(system_app, vendor_sysfs_usb_supply)
+
+# Gamespace
+r_dir_file(system_app, vendor_sysfs_sde_crtc)
