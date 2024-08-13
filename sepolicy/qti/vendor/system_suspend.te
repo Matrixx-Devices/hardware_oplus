@@ -1,3 +1,3 @@
 #============= system_suspend ==============
 #allow system_suspend_t sysfs:file read;
-#allow system_suspend sysfs:file read;
+#allow system_suspend sysfs:file r_file_perms;
