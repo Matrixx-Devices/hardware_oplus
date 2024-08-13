@@ -20,3 +20,5 @@ set_prop(vendor_mdm_helper, vendor_modem_prop)
 allow vendor_mdm_helper tmpfs:dir { write };
 allow vendor_mdm_helper mnt_vendor_file:dir { write add_name write };
 allow vendor_mdm_helper mnt_vendor_file:file { create write };
+
+allow vendor_mdm_helper default_prop:file read;

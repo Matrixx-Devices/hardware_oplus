@@ -1,0 +1,5 @@
+#============= init ==============
+allow init device:file create;
+allow init proc:file write;
+set_prop(init, vendor_default_prop)
+set_prop(init, vendor_fingerprint_prop)
