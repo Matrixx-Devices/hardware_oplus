@@ -1,2 +1,0 @@
-# Allow hal_power_default to open files labeled as device
-allow hal_power_default device:file { open };
