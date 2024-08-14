@@ -22,6 +22,6 @@ allow vendor_mdm_helper mnt_vendor_file:dir { write add_name write };
 allow vendor_mdm_helper mnt_vendor_file:file { create write };
 
 allow vendor_mdm_helper default_prop:file r_file_perms;
-get_prop(vendor_mdm_helper, vendor_system_prop)
+get_prop(vendor_mdm_helper, system_prop)
 
 r_dir_file(vendor_mdm_helper, vendor_system_prop)
