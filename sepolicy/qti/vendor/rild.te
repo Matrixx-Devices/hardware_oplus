@@ -9,7 +9,7 @@ set_prop(rild, vendor_nw_exported_system_prop)
 allow rild system_prop:file { getattr map };
 
 allow rild cache_file:dir { getattr search };
-allow rild system_data_root_file:dir rw_dir_perms;
+allow rild system_data_root_file:dir write;
 get_prop(rild, default_prop)
 set_prop(rild, vendor_default_prop)
 allow rild default_prop:file read;
