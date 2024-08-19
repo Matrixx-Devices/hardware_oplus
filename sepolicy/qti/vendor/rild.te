@@ -13,5 +13,3 @@ allow rild system_data_root_file:dir rw_dir_perms;
 get_prop(rild, default_prop)
 set_prop(rild, vendor_default_prop)
 allow rild default_prop:file read;
-allow rild cache_file:dir create;
-allow rild system_data_file:dir getattr;

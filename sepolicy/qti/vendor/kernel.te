@@ -1,7 +1,2 @@
 allow kernel kernel:qipcrtr_socket { create };
 allow kernel vendor_file:file r_file_perms;
-
-allow kernel kernel:capability dac_read_search;
-
-allow kernel packages_list_file:file read;
-
