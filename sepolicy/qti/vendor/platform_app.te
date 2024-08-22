@@ -1,3 +1,11 @@
+<<<<<<< HEAD
 r_dir_file(platform_app, vendor_proc_ui_soc_decimal)
 get_prop(platform_app, audio_config_prop)
 r_dir_file(platform_app, sysfs_dm)
+=======
+allow platform_app hal_dms_hwservice:hwservice_manager find;
+
+binder_call(platform_app, hal_dms_default)
+
+get_prop(platform_app, audio_config_prop)
+>>>>>>> parent of dcae491 (Revert "sepolicy: Add dolby support")
