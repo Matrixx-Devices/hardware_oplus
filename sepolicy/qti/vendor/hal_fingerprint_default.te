@@ -19,9 +19,6 @@ allow hal_fingerprint_default fingerprint_device:chr_file rw_file_perms;
 allow hal_fingerprint_default graphics_device:chr_file rw_file_perms;
 allow hal_fingerprint_default tee_device:chr_file rw_file_perms;
 allow hal_fingerprint_default uhid_device:chr_file rw_file_perms;
-
-allow hal_fingerprint_default default_prop:file { read open getattr };
-
 allow hal_fingerprint_default mnt_vendor_file:dir search;
 
 allow hal_fingerprint_default proc:file { read write open };
@@ -36,3 +33,4 @@ get_prop(hal_fingerprint_default, system_oplus_project_prop)
 get_prop(hal_fingerprint_default, vendor_radio_prop)
 set_prop(hal_fingerprint_default, system_fingerprint_prop)
 set_prop(hal_fingerprint_default, vendor_fingerprint_prop)
+get_prop(hal_fingerprint_default, default_prop)

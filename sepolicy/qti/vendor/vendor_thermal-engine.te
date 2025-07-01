@@ -1,2 +1,2 @@
-r_dir_file(vendor_thermal-engine, vendor_sysfs_usb_supply)
-allow vendor_thermal-engine self:capability dac_override;
+#r_dir_file(vendor_thermal-engine, vendor_sysfs_usb_supply)
+
