@@ -1,3 +1,8 @@
+type rild_data_dir;
+type rild_data_file;
+type rild_cache_file;
+
+
 allow rild mnt_vendor_file:dir search;
 
 allow rild vendor_proc_display:file r_file_perms;
@@ -12,3 +17,5 @@ allow rild rild_cache_file:dir { search getattr };
 r_dir_file(rild, vendor_proc_engineer)
 
 set_prop(rild, vendor_nw_exported_system_prop)
+get_prop(rild, default_prop)
+get_prop(rild, system_prop)
