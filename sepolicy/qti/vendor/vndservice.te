@@ -1,2 +1,2 @@
-# Touch
-type touchDeamonBinder_service, vndservice_manager_type;
+# QTEE
+type vendor_qms_service, vndservice_manager_type;

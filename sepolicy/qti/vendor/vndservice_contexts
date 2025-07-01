@@ -1,2 +1,2 @@
-# Touch
-touchDeamonBinder    u:object_r:touchDeamonBinder_service:s0
+# QTEE
+com.qualcomm.qti.qms.service.trustzoneaccess.GetClientAppInfo    u:object_r:vendor_qms_service:s0

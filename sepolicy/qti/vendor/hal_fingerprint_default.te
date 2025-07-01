@@ -1,39 +1,26 @@
-type fp_kernel_event_proc, file_type;
 allow hal_fingerprint_default self:netlink_socket create_socket_perms_no_ioctl;
 
 binder_call(hal_fingerprint_default, hal_fingerprint_default)
-binder_call(hal_fingerprint_default, hal_oplus_touch_aidl)
+binder_call(hal_fingerprint_default, hal_power_default)
 
-hal_client_domain(hal_fingerprint_default, vendor_hal_oplus_commondcs)
-hal_client_domain(hal_fingerprint_default, vendor_hal_oplus_osense)
-hal_client_domain(hal_fingerprint_default, vendor_hal_oplus_performance)
-hal_client_domain(hal_fingerprint_default, vendor_hal_oplus_touch)
-hal_client_domain(hal_fingerprint_default, vendor_hal_oplus_touchdaemon)
+hal_client_domain(hal_fingerprint_default, hal_power)
 
-allow hal_fingerprint_default hal_oplus_touch_aidl_service:service_manager find;
-allow hal_fingerprint_default hal_oplus_urcc_aidl_service:service_manager find;
 allow hal_fingerprint_default vendor_hal_orms_hwservice:hwservice_manager find;
-allow hal_fingerprint_default vendor_hal_osense_hwservice:hwservice_manager find;
+allow hal_fingerprint_default vendor_hal_performance_hwservice:hwservice_manager find;
 
 allow hal_fingerprint_default fingerprint_device:chr_file rw_file_perms;
 allow hal_fingerprint_default graphics_device:chr_file rw_file_perms;
 allow hal_fingerprint_default tee_device:chr_file rw_file_perms;
-allow hal_fingerprint_default uhid_device:chr_file rw_file_perms;
-allow hal_fingerprint_default mnt_vendor_file:dir search;
 
-allow hal_fingerprint_default proc:file { read write open };
+allow hal_fingerprint_default vendor_proc_tee_bind_core:file w_file_perms;
 
-rw_dir_file(hal_fingerprint_default, vendor_persist_fingerprint_file)
+allow hal_fingerprint_default vendor_qdsp_device:chr_file rw_file_perms;
+allow hal_fingerprint_default vendor_xdsp_device:chr_file rw_file_perms;
+
 rw_dir_file(hal_fingerprint_default, vendor_proc_display)
-rw_dir_file(hal_fingerprint_default, vendor_sysfs_graphics)
-r_dir_file(hal_fingerprint_default, sysfs_leds)
-r_dir_file(hal_fingerprint_default, vendor_proc_fingerprint)
+rw_dir_file(hal_fingerprint_default, vendor_proc_fingerprint)
+r_dir_file(hal_fingerprint_default, vendor_sysfs_graphics)
 
 get_prop(hal_fingerprint_default, system_oplus_project_prop)
-get_prop(hal_fingerprint_default, vendor_radio_prop)
 set_prop(hal_fingerprint_default, system_fingerprint_prop)
 set_prop(hal_fingerprint_default, vendor_fingerprint_prop)
-#get_prop(hal_fingerprint_default, default_prop)
-dontaudit {
-  hal_fingerprint_default
-} default_prop:file r_file_perms;

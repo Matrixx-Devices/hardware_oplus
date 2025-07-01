@@ -1,25 +1,22 @@
-# Declare the new type
-type vendor_mdm_block_device, dev_type, file_type;
-
-# Allow vendor_mdm_helper to access the block device
-allow vendor_mdm_helper vendor_mdm_block_device:blk_file { read write open };
-
-# Allow reading vendor_radio_prop
-allow vendor_mdm_helper vendor_radio_prop:file { read open getattr };
-
-# Allow reading vendor_audio_debug_prop
-allow vendor_mdm_helper vendor_audio_debug_prop:file { read open getattr };
-
 allow vendor_mdm_helper vendor_modem_efs_partition_device:blk_file rw_file_perms;
+
 allow vendor_mdm_helper vendor_sysfs_soc_sensitive:file r_file_perms;
 
+# Needed to allow boot over PCIe
+allow vendor_mdm_helper vendor_mhi_device:chr_file rw_file_perms;
+
+#Needed by ks in order to access the efs sync partitions
+allow vendor_mdm_helper block_device:dir rw_dir_perms;
+allow vendor_mdm_helper efs_boot_device:blk_file r_file_perms;
+
+r_dir_file(vendor_mdm_helper, mnt_vendor_file)
 r_dir_file(vendor_mdm_helper, vendor_proc_engineer)
 r_dir_file(vendor_mdm_helper, vendor_proc_oplus_version)
+allow vendor_mdm_helper mnt_vendor_file:dir { search };
+allow vendor_mdm_helper vendor_radio_prop:file { read };
 
+get_prop(vendor_mdm_helper, vendor_radio_prop)
 set_prop(vendor_mdm_helper, vendor_modem_prop)
-#get_prop(vendor_mdm_helper, default_prop)
-#get_prop(vendor_mdm_helper, system_prop)
-
-dontaudit {
-  vendor_mdm_helper
-} default_prop:file r_file_perms;
+allow vendor_mdm_helper tmpfs:dir { write };
+allow vendor_mdm_helper mnt_vendor_file:dir { write add_name write };
+allow vendor_mdm_helper mnt_vendor_file:file { create write };
