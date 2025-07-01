@@ -1,3 +1,21 @@
+# Declare the new type
+type vendor_mdm_block_device, dev_type, file_type;
+
+# Allow vendor_mdm_helper to access the block device
+allow vendor_mdm_helper vendor_mdm_block_device:blk_file { read write open };
+
+# Allow reading vendor_radio_prop
+allow vendor_mdm_helper vendor_radio_prop:file { read open getattr };
+
+# Allow reading vendor_audio_debug_prop
+allow vendor_mdm_helper vendor_audio_debug_prop:file { read open getattr };
+
+# Allow reading system_prop
+allow vendor_mdm_helper system_prop:file { read open getattr };
+
+# Allow reading default_prop
+allow vendor_mdm_helper default_prop:file { read open getattr };
+
 allow vendor_mdm_helper vendor_modem_efs_partition_device:blk_file rw_file_perms;
 allow vendor_mdm_helper vendor_sysfs_soc_sensitive:file r_file_perms;
 

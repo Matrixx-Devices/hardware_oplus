@@ -2,6 +2,13 @@ allow rild mnt_vendor_file:dir search;
 
 allow rild vendor_proc_display:file r_file_perms;
 
+# Allow access to /data/opponvitems
+allow rild rild_data_file:dir { write add_name search };
+allow rild rild_data_file:file { write create open getattr };
+
+# Allow access to /cache
+allow rild rild_cache_file:dir { search getattr };
+
 r_dir_file(rild, vendor_proc_engineer)
 
 set_prop(rild, vendor_nw_exported_system_prop)
