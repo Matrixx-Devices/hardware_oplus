@@ -1,4 +1,5 @@
 #============= vendor_pd_mapper ==============
 #allow vendor_pd_mapper system_prop:file { read open getattr };
-get_prop(vendor_pd_mapper, system_prop)
-
+dontaudit {
+  vendor_pd_mapper
+} system_prop:file r_file_perms;
