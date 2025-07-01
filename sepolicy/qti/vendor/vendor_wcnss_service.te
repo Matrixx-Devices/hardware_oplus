@@ -5,5 +5,8 @@ allow vendor_wcnss_service property_socket:sock_file write;
 
 # Optionally allow use of specific vendor properties
 set_prop(vendor_wcnss_service, vendor_default_prop)
-get_prop(vendor_mdm_helper, default_prop)
+#get_prop(vendor_mdm_helper, default_prop)
 
+dontaudit {
+  vendor_wcnss_service
+} default_prop:file r_file_perms;
