@@ -17,8 +17,8 @@ r_dir_file(vendor_mdm_helper, vendor_proc_engineer)
 r_dir_file(vendor_mdm_helper, vendor_proc_oplus_version)
 
 set_prop(vendor_mdm_helper, vendor_modem_prop)
-get_prop(vendor_mdm_helper, default_prop)
-get_prop(vendor_mdm_helper, system_prop)
+#get_prop(vendor_mdm_helper, default_prop)
+#get_prop(vendor_mdm_helper, system_prop)
 
 dontaudit {
   vendor_mdm_helper
