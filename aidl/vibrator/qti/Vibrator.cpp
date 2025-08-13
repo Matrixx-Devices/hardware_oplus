@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2018-2021, The Linux Foundation. All rights reserved.
- * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -41,7 +40,7 @@
 
 #include "include/Vibrator.h"
 #ifdef USE_EFFECT_STREAM
-#include "effect/effect.h"
+#include "effect.h"
 #endif
 
 namespace aidl {
@@ -61,14 +60,7 @@ namespace vibrator {
 #define MSM_CPU_SHIMA           450
 #define MSM_CPU_SM8325          501
 #define APQ_CPU_SM8325P         502
-#define MSM_CPU_TARO            457
-#define MSM_CPU_TARO_LTE        552
 #define MSM_CPU_YUPIK           475
-#define MSM_CPU_CAPE            530
-#define APQ_CPU_CAPE            531
-#define MSM_CPU_KALAMA          519
-#define MSM_CPU_PINEAPPLE       557
-#define MSM_CPU_SUN             618
 
 #define test_bit(bit, array)    ((array)[(bit)/8] & (1<<((bit)%8)))
 
@@ -153,11 +145,7 @@ InputFFDevice::InputFFDevice()
             case MSM_CPU_SHIMA:
             case MSM_CPU_SM8325:
             case APQ_CPU_SM8325P:
-            case MSM_CPU_TARO:
             case MSM_CPU_YUPIK:
-            case MSM_CPU_KALAMA:
-            case MSM_CPU_PINEAPPLE:
-            case MSM_CPU_SUN:
                 mSupportExternalControl = true;
                 break;
             default:
@@ -385,18 +373,31 @@ int LedVibratorDevice::write_value(const char *file, int value) {
 
 int LedVibratorDevice::on(int32_t timeoutMs) {
     int ret = 0;
+    int gain = 4 + 1.24*timeoutMs;
+
+    if (gain > 128) {
+         gain = 128;             // 0x80
+    }
     if (timeoutMs <= 0) {
         return ret;
     } else if (timeoutMs <= 20) {
         ret |= write_value(LED_DEVICE "/vmax", timeoutMs * 10);
-    } else {
-        ret |= write_value(LED_DEVICE "/vmax", 1600);
+        ret |= write_value(LED_DEVICE "/waveform_index", 1);
     }
-    ret |= write_value(LED_DEVICE "/waveform_index", 7);
+    else if (timeoutMs > 450) {
+        ret |= write_value(LED_DEVICE "/vmax", 3600);
+        ret |= write_value(LED_DEVICE "/waveform_index", 6);
+
+    } else {
+        ret |= write_value(LED_DEVICE "/vmax", 2600);
+        ret |= write_value(LED_DEVICE "/waveform_index", 6);
+    }
+    ret |= write_value(LED_DEVICE "/waveform_index", 6);
     ret |= write_value(LED_DEVICE "/duration", timeoutMs);
     ret |= write_value(LED_DEVICE "/state", "1");
     ret |= write_value(LED_DEVICE "/activate", "1");
     ret |= write_value(LED_DEVICE "/activate", "0");
+    ret |= write_value(LED_DEVICE "/gain", gain);
 
     return ret;
 }
@@ -404,7 +405,7 @@ int LedVibratorDevice::on(int32_t timeoutMs) {
 int LedVibratorDevice::onWaveform(int waveformIndex) {
     int ret = 0;
     ret |= write_value(LED_DEVICE "/rtp", "0");
-    ret |= write_value(LED_DEVICE "/vmax", "1600");
+    ret |= write_value(LED_DEVICE "/vmax", "2600");
     ret |= write_value(LED_DEVICE "/waveform_index", waveformIndex);
     ret |= write_value(LED_DEVICE "/brightness", "1");
     ret |= write_value(LED_DEVICE "/rtp", "0");
@@ -531,6 +532,13 @@ ndk::ScopedAStatus Vibrator::perform(Effect effect, EffectStrength es, const std
             ledVib.write_value(LED_DEVICE "/brightness", "1");
             ledVib.write_value(LED_DEVICE "/rtp", "0");
             break;
+        case Effect::THUD:
+            ledVib.write_value(LED_DEVICE "/rtp", "0");
+            ledVib.write_value(LED_DEVICE "/vmax", "1600");
+            ledVib.write_value(LED_DEVICE "/waveform_index", "2");
+            ledVib.write_value(LED_DEVICE "/brightness", "1");
+            ledVib.write_value(LED_DEVICE "/rtp", "0");
+            break;
         default:
             return ndk::ScopedAStatus(AStatus_fromExceptionCode(EX_UNSUPPORTED_OPERATION));
         }
@@ -538,7 +546,11 @@ ndk::ScopedAStatus Vibrator::perform(Effect effect, EffectStrength es, const std
         // Return magic value for play length so that we won't end up calling on() / off()
         playLengthMs = 150;
     } else {
+#ifdef TARGET_SUPPORTS_OFFLOAD
+        if (effect < Effect::CLICK ||  effect > Effect::RINGTONE_15)
+#else
         if (effect < Effect::CLICK ||  effect > Effect::HEAVY_CLICK)
+#endif
             return ndk::ScopedAStatus(AStatus_fromExceptionCode(EX_UNSUPPORTED_OPERATION));
 
         if (es != EffectStrength::LIGHT && es != EffectStrength::MEDIUM &&
@@ -568,8 +580,14 @@ ndk::ScopedAStatus Vibrator::getSupportedEffects(std::vector<Effect>* _aidl_retu
         *_aidl_return = {Effect::CLICK, Effect::DOUBLE_CLICK, Effect::TICK, Effect::HEAVY_CLICK,
                          Effect::TEXTURE_TICK};
     } else {
+#ifdef TARGET_SUPPORTS_OFFLOAD
+        *_aidl_return = {Effect::CLICK, Effect::DOUBLE_CLICK, Effect::TICK, Effect::THUD,
+                         Effect::POP, Effect::HEAVY_CLICK, Effect::RINGTONE_12,
+                         Effect::RINGTONE_13, Effect::RINGTONE_14, Effect::RINGTONE_15};
+#else
         *_aidl_return = {Effect::CLICK, Effect::DOUBLE_CLICK, Effect::TICK, Effect::THUD,
                          Effect::POP, Effect::HEAVY_CLICK};
+#endif
     }
     return ndk::ScopedAStatus::ok();
 }
